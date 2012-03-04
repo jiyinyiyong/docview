@@ -3,15 +3,13 @@ require 'coffee-script'
 compile = (require './json2page').render
 lx = (require './liuxian').lx
 makeHtml = (require './showdown').makeHtml
-coffee = require 'coffee-script'
-global = {}
 o = console.log
 fs = require 'fs'
 url = require 'url'
 
 server = (require 'http').createServer (req, res) ->
   parse = url.parse req.url
-  path = parse.pathname
+  path = decodeURI parse.pathname
   type = parse.query
   page = render path, type, res
 server.listen 8000
@@ -36,11 +34,21 @@ template = (dir, main) ->
         pre:
           background: 'hsl(300,95%,95%)'
     $body:
-      $p:
-        $a:
-          href: dir.parent
-          $text: 'Home' + dir.parent
-        $span: dir.own
+      $a0:
+        href: 'https://github.com/jiyinyiyong/docview'
+        $image0:
+          style:
+            position: 'absolute'
+            top: 0
+            right: 0
+            border: 0
+          src: 'https://a248.e.akamai.net/assets.github.com/img/7afbc8b248c68eb468279e8c17986ad46549fb71/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67'
+          alt: 'Folk me on Github'
+        $p:
+          $a:
+            href: dir.parent
+            $text: 'Home' + dir.parent
+          $span: dir.own
       $pipe: main
 
 at = __dirname
