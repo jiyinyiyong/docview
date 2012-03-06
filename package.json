@@ -4,8 +4,11 @@
   "scripts": {
     "start": "app.coffee"
   },
-  "version": "0.0.1-1",
+  "version": "0.0.1-5",
   "engines": {
     "node": "0.6.11"
+  },
+  "dependencies": {
+    "jade": "0.20.3"
   }
 }

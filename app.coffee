@@ -6,6 +6,7 @@ makeHtml = (require './showdown').makeHtml
 o = console.log
 fs = require 'fs'
 url = require 'url'
+compile_jade = (require 'jade').compile
 
 server = (require 'http').createServer (req, res) ->
   parse = url.parse req.url
@@ -21,8 +22,10 @@ render = (path, type, res) ->
       else if type is 'raw' then source path, res
       else if type is 'lx' then liuxian path, res
       else if type is 'md' then gfm path, res
+      else if type is 'html' then viewhtml path, res
+      else if type is 'jade' then jade2html path, res
       else give_raw path, res
-    else source path, res
+    else give_raw path, res
 
 template = (dir, main) ->
   $html:
@@ -31,24 +34,26 @@ template = (dir, main) ->
       $meta:
         charset: 'utf-8'
       $style:
+        '*':
+          'font-family': 'Wenquanyi Micro Hei Mono'
+          'font-size': '13px'
+          'line-height': 26
         pre:
+          margin: '0px 0px'
+          background: 'hsl(300,95%,95%)'
+          padding: '0px 3px'
+        a:
+          'text-decoration': 'none'
+        'body>code':
+          padding: '0px 3px'
           background: 'hsl(300,95%,95%)'
     $body:
-      $a0:
-        href: 'https://github.com/jiyinyiyong/docview'
-        $image0:
-          style:
-            position: 'absolute'
-            top: 0
-            right: 0
-            border: 0
-          src: 'http://goo.gl/eiuVs'
-          alt: 'Folk me on Github'
-        $p:
-          $a:
-            href: dir.parent
-            $text: 'Home' + dir.parent
-          $span: dir.own
+      $p:
+        $a:
+          href: dir.parent
+          $text: 'Home' + dir.parent
+        $span:
+          $text: dir.own
       $pipe: main
 
 at = __dirname
@@ -71,7 +76,19 @@ liuxian = (path, res) ->
     dir = parent path
     data = lx data
     html = template dir, data
+    res.writeHead 200, 'Content-Type': 'text/html'
     res.end (compile html)
+
+viewhtml = (path, res) ->
+  fs.readFile at+path, 'utf8', (err, data) ->
+    res.writeHead 200, 'Content-Type': 'text/html'
+    res.end data
+
+jade2html = (path, res) ->
+  fs.readFile at+path, 'utf8', (err, data) ->
+    dir = parent path
+    data = do compile_jade data
+    res.end data
 
 gfm = (path, res) ->
   fs.readFile at+path, 'utf8', (err, data) ->
@@ -107,17 +124,22 @@ dirview = (path, res) ->
         line.$span1 = ' '
         line.$a1 =
           href: path+file+'?md'
-          $text: 'view as Markdown'
-      unless isdir
+          $text: '->Markdown'
+      if file.match /\.(html?)|(markdown)$/
+        line.$span2 = ' '
+        line.$a2 =
+          href: path+file+'?html'
+          $text: '->HTML'
+      if file.match /\.(jade?)|(markdown)$/
         line.$span3 = ' '
         line.$a3 =
-          href: path+file
-          $text: 'open'
+          href: path+file+'?jade'
+          $text: '->HTML'
       if file.match /\.lx$/
         line.$span4 = ' '
         line.$a4 =
           href: path+file+'?lx'
-          $text: 'view as LiuXian'
+          $text: '->LiuXian'
       html.$html.$body["$p#{index}"] = line
     res.end compile html
 

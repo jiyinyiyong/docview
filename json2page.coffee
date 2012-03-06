@@ -45,7 +45,7 @@ render_style = (data) ->
     for attr, content of value
       if match = attr.match /^([a-z-]+)\d*$/
         style += "#{match[1]}:"
-      if typeof value is 'number' then style += "#{content}px;" else
+      if typeof content is 'number' then style += "#{content}px;" else
         style += "#{content};"
     style += '\}'
   return style
