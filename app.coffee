@@ -1,8 +1,7 @@
 
-require 'coffee-script'
-compile = (require './json2page').render
-lx = (require './liuxian').lx
-makeHtml = (require './showdown').makeHtml
+compile = (require './libs/json2page').render
+lx = (require './libs/liuxian').lx
+makeHtml = (require './libs/showdown').makeHtml
 o = console.log
 fs = require 'fs'
 url = require 'url'
