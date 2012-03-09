@@ -1,5 +1,4 @@
-var err, json2page, o, out, render_style,
-  __slice = Array.prototype.slice;
+var json2page, out, render_style;
 
 json2page = function(data) {
   var attrs, check, css, html, item, key, match, parse, tags, value, _i, _id, _j, _k, _len, _len2, _len3, _ref, _tag;
@@ -55,8 +54,10 @@ json2page = function(data) {
       _id = item.id;
       _tag = item.tag || 'div';
       match = _tag.match(/^([a-z]+)\d*$/);
-      if (_tag.match(/^text\d*$/)) {
+      if (_tag.match(/^page\d*$/)) {
         html += item.value;
+      } else if (_tag.match(/^text\d*/)) {
+        html += item.value.replace('<', '&lt;').replace('>', '&gt;').replace(' ', '&nbsp;');
       } else {
         html += "<" + match[1] + " ";
         if (_id) html += "id='" + _id + "'";
@@ -94,20 +95,55 @@ render_style = function(data) {
   return style;
 };
 
-err = function(e) {
-  return o('Error: ', e);
-};
+/*
+err = (e) ->
+  o 'Error: ', e
+o = console.log or (v...)->null
 
-o = console.log || function() {
-  var v;
-  v = 1 <= arguments.length ? __slice.call(arguments, 0) : [];
-  return null;
-};
+data =
+  $head:
+    $meta:
+      charset: 'utf-8'
+    $link:
+      rel: 'stylesheet'
+      href: 'path/to/css/file'
+  $style:
+    body:
+      padding: 'dd'
+      "-moz-box-shadow": '0px 0px 0px red'
+    'nav:hover':
+      background: 'red'
+  $body:
+    style:
+      display: '-moz-box'
+      display1: 'box'
+      background: 'hsl(0,80%,80%)'
+    style1:
+      width: 1
+    $text: 'line 1'
+    $text1: 'line 2<>'
+    $page: 'page  <br/>'
+    $span:
+      style:
+        width: 111
+      $text: 'nothin  g'
+    $span1: '3'
+    id_here$span1: 'add'
+    $pipe:
+      $text: 'qq'
+o (json2page data)[1..]
+
+data =
+  $p:
+    $text: '<text >'
+    $page: '<page >'
+console.log (json2page data)[1..]
+*/
 
 out = function(data) {
   return (json2page(data)).slice(1);
 };
 
-if (typeof window === 'object') window.render = out;
+if (typeof window !== "undefined" && window !== null) window.json2page = out;
 
-if (typeof exports === 'object') exports.render = out;
+if (typeof exports !== "undefined" && exports !== null) exports.json2page = out;

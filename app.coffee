@@ -1,7 +1,8 @@
 
-compile = (require './libs/json2page').render
+compile = (require './libs/json2page').json2page
 lx = (require './libs/liuxian').lx
 makeHtml = (require './libs/showdown').makeHtml
+make_note = (require './libs/codeNotes').render
 o = console.log
 fs = require 'fs'
 url = require 'url'
@@ -23,6 +24,7 @@ render = (path, type, res) ->
       else if type is 'md' then gfm path, res
       else if type is 'html' then viewhtml path, res
       else if type is 'jade' then jade2html path, res
+      else if type is 'note' then note_page path, res
       else give_raw path, res
     else give_raw path, res
 
@@ -89,6 +91,12 @@ jade2html = (path, res) ->
     data = do compile_jade data
     res.end data
 
+note_page = (path, res) ->
+  fs.readFile at+path, 'utf8', (err, data) ->
+    dir = parent path
+    data = make_note data, path, 'coffee'
+    res.end data
+
 gfm = (path, res) ->
   fs.readFile at+path, 'utf8', (err, data) ->
     dir = parent path
@@ -139,6 +147,11 @@ dirview = (path, res) ->
         line.$a4 =
           href: path+file+'?lx'
           $text: '->LiuXian'
+      if file.match /\.note$/
+        line.$span5 = ' '
+        line.$a5 =
+          href: path+file+'?note'
+          $text: '->Note'
       html.$html.$body["$p#{index}"] = line
     res.end compile html
 
