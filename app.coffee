@@ -25,6 +25,7 @@ render = (path, type, res) ->
       else if type is 'html' then viewhtml path, res
       else if type is 'jade' then jade2html path, res
       else if type is 'note' then note_page path, res
+      else if type is 'js' then give_raw path, res
       else give_raw path, res
     else give_raw path, res
 
@@ -152,6 +153,11 @@ dirview = (path, res) ->
         line.$a5 =
           href: path+file+'?note'
           $text: '->Note'
+      if file.match /\.js$/
+        line.$span6 = ' '
+        line.$a6 =
+          href: path+file+'?js'
+          $text: '->js'
       html.$html.$body["$p#{index}"] = line
     res.end compile html
 

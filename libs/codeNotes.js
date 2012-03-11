@@ -33,6 +33,12 @@ page_layout = function(table, title) {
             padding: '0px 3px',
             margin: '0px 3px',
             background: '#ddd'
+          },
+          pre: {
+            margin: 0
+          },
+          a: {
+            'text-decoration': 'none'
           }
         }
       },
