@@ -9,6 +9,5 @@
     "node": "0.6.11"
   },
   "dependencies": {
-    "jade": "0.20.3"
   }
 }

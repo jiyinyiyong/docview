@@ -6,7 +6,6 @@ make_note = (require './libs/codeNotes').render
 o = console.log
 fs = require 'fs'
 url = require 'url'
-compile_jade = (require 'jade').compile
 
 server = (require 'http').createServer (req, res) ->
   parse = url.parse req.url
@@ -23,7 +22,6 @@ render = (path, type, res) ->
       else if type is 'lx' then liuxian path, res
       else if type is 'md' then gfm path, res
       else if type is 'html' then viewhtml path, res
-      else if type is 'jade' then jade2html path, res
       else if type is 'note' then note_page path, res
       else if type is 'js' then give_raw path, res
       else give_raw path, res
@@ -86,12 +84,6 @@ viewhtml = (path, res) ->
     res.writeHead 200, 'Content-Type': 'text/html'
     res.end data
 
-jade2html = (path, res) ->
-  fs.readFile at+path, 'utf8', (err, data) ->
-    dir = parent path
-    data = do compile_jade data
-    res.end data
-
 note_page = (path, res) ->
   fs.readFile at+path, 'utf8', (err, data) ->
     dir = parent path
@@ -137,11 +129,6 @@ dirview = (path, res) ->
         line.$span2 = ' '
         line.$a2 =
           href: path+file+'?html'
-          $text: '->HTML'
-      if file.match /\.(jade?)|(markdown)$/
-        line.$span3 = ' '
-        line.$a3 =
-          href: path+file+'?jade'
           $text: '->HTML'
       if file.match /\.lx$/
         line.$span4 = ' '
