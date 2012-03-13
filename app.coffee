@@ -6,13 +6,14 @@ make_note = (require './libs/codeNotes').render
 o = console.log
 fs = require 'fs'
 url = require 'url'
+port = if process.argv[2]? then Number process.argv[2] else 80
 
 server = (require 'http').createServer (req, res) ->
   parse = url.parse req.url
   path = decodeURI parse.pathname
   type = parse.query
   page = render path, type, res
-server.listen 8000
+server.listen port
 
 render = (path, type, res) ->
   fs.stat at+path, (err, stats) ->
@@ -47,6 +48,12 @@ template = (dir, main) ->
         'body>code':
           padding: '0px 3px'
           background: 'hsl(300,95%,95%)'
+        '.modified_time':
+          margin: '0px 10px'
+          background: '#ccd'
+          color: '#633'
+        '.name':
+          background: '#edd'
     $body:
       $p:
         $a:
@@ -114,12 +121,21 @@ dirview = (path, res) ->
       if path[-1..] isnt '/' then path += '/'
       target = at+path+file
       isdir = false
-      if (fs.statSync target).isDirectory() then isdir = true
+      stat = fs.statSync target
+      if stat.isDirectory() then isdir = true
       if isdir then file += '/'
+      year = stat.mtime.getYear().toString()[1..]
+      month = stat.mtime.getMonth()
+      date = stat.mtime.getDate()
+      mtime = "#{year}/#{month}/#{date}"
       line =
         $a:
+          class: 'name'
           href: path+file+'?raw'
           $text: file
+        $span:
+          class: 'modified_time'
+          $text: mtime
       if file.match /\.(md)|(markdown)$/
         line.$span1 = ' '
         line.$a1 =
