@@ -50,8 +50,8 @@ template = (dir, main) ->
           background: 'hsl(300,95%,95%)'
         '.modified_time':
           margin: '0px 10px'
-          background: '#ccd'
-          color: '#633'
+          background: '#e8e8f8'
+          color: '#daa'
         '.name':
           background: '#edd'
     $body:
@@ -124,10 +124,11 @@ dirview = (path, res) ->
       stat = fs.statSync target
       if stat.isDirectory() then isdir = true
       if isdir then file += '/'
-      year = stat.mtime.getYear().toString()[1..]
       month = stat.mtime.getMonth()
       date = stat.mtime.getDate()
-      mtime = "#{year}/#{month}/#{date}"
+      hour = stat.mtime.getHours()
+      min = stat.mtime.getMinutes()
+      mtime = "#{month}/#{date} #{hour}:#{min}"
       line =
         $a:
           class: 'name'
