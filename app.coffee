@@ -37,11 +37,10 @@ template = (dir, main) ->
       $style:
         '*':
           'font-family': 'Wenquanyi Micro Hei Mono'
-          'font-size': '13px'
+          'font-size': 13
           'line-height': 26
         pre:
           margin: '0px 0px'
-          background: 'hsl(300,95%,95%)'
           padding: '0px 3px'
         a:
           'text-decoration': 'none'
@@ -54,6 +53,15 @@ template = (dir, main) ->
           color: '#daa'
         '.name':
           background: '#edd'
+        'tr:nth-child(2n)':
+          background: '#f2f2ff'
+        'td:nth-child(2n+1)':
+          width: 52
+          color: '#f88'
+          background: '#eff'
+        table:
+          '-webkit-border-vertical-spacing': 0
+          '-webkit-border-horizontal-spacing': 0
     $body:
       $p:
         $a:
@@ -75,7 +83,15 @@ source = (path, res) ->
       .replace(/</g,'&lt;')
     main = $pre:
       $code: data
-    html = template dir, main
+    sub = {}
+    for line, index in data.split '\n'
+      piece =
+        $td: "#{index}"
+        $td1:
+          $pre:
+            $code: line
+      sub["$tr#{index}"] = piece
+    html = template dir, $table: sub
     res.end (compile html)
 
 liuxian = (path, res) ->

@@ -15,7 +15,7 @@ page_layout = function(table, title) {
         },
         $style: {
           '*': {
-            'font-size': 14,
+            'font-size': 12,
             'line-height': 18,
             'font-family': 'Monospace, wenquanyi micro hei mono'
           },

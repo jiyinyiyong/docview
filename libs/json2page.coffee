@@ -27,7 +27,7 @@ json2page = (data) ->
       _tag = item.tag || 'div'
       match = _tag.match /^([a-z]+)\d*$/
       if _tag.match /^page\d*$/ then html += item.value
-      else if _tag.match /^text\d*/
+      else if _tag.match /^text\d*$/
         html += item.value.replace('<','&lt;').replace('>','&gt;').replace(' ','&nbsp;')
       else
         html += "<#{match[1]} "
@@ -44,6 +44,9 @@ json2page = (data) ->
 render_style = (data) ->
   style = ''
   for key, value of data
+    if (key.match /^\$pipe\d*$/)?
+      style += render_style value
+      continue
     style += "#{key}\{"
     for attr, content of value
       if match = attr.match /^([a-z-]+)\d*$/
@@ -96,6 +99,16 @@ data =
     $text: '<text >'
     $page: '<page >'
 console.log (json2page data)[1..]
+
+data =
+  $style:
+    $pipe:
+      background:
+        color: '#fff'
+    $pipe2:
+      div:
+        color: 'red'
+console.log json2page data
 ###
 
 out = (data) ->

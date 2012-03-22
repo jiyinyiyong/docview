@@ -10,7 +10,7 @@ page_layout = (table, title) ->
         charset: 'utf-8'
       $style:
         '*':
-          'font-size': 14
+          'font-size': 12
           'line-height': 18
           'font-family': 'Monospace, wenquanyi micro hei mono'
         td:
