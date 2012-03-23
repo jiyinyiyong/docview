@@ -1361,4 +1361,6 @@ var escapeCharacters_callback = function(wholeMatch,m1) {
 
 } // end of Showdown.converter
 
-exports.makeHtml = (new Showdown.converter()).makeHtml
+if((typeof exports) != 'undefined'){
+  exports.makeHtml = (new Showdown.converter()).makeHtml
+}
