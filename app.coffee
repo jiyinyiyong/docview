@@ -49,8 +49,7 @@ template = (dir, main) ->
           padding: '0px 3px'
         a:
           'text-decoration': 'none'
-        'body>code':
-          padding: '0px 3px'
+        'body>pre, p>code':
           background: 'hsl(300,95%,95%)'
         '.modified_time':
           margin: '0px 10px'
