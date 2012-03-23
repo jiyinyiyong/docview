@@ -18,13 +18,13 @@ server.listen port
 render = (path, type, res) ->
   fs.stat at+path, (err, stats) ->
     if stats
-      if stats.isDirectory() then dirview path, res
-      else if type is 'raw' then source path, res
-      else if type is 'lx' then liuxian path, res
-      else if type is 'md' then gfm path, res
-      else if type is 'html' then viewhtml path, res
+      if stats.isDirectory() then dirview   path, res
+      else if type is 'raw'  then source    path, res
+      else if type is 'lx'   then liuxian   path, res
+      else if type is 'md'   then gfm       path, res
+      else if type is 'html' then viewhtml  path, res
       else if type is 'note' then note_page path, res
-      else if type is 'js' then give_raw path, res
+      else if type is 'js'   then give_raw  path, res
       else give_raw path, res
     else give_raw path, res
 
@@ -32,13 +32,18 @@ template = (dir, main) ->
   $html:
     $head:
       $title: dir.own
+      $link:
+        href: 'http://fonts.googleapis.com/css?family=Ubuntu'
+        rel: 'stylesheet'
+        type: 'text/css'
       $meta:
         charset: 'utf-8'
       $style:
         '*':
-          'font-family': 'Wenquanyi Micro Hei Mono'
+          'font-family': 'Ubuntu Mono'
           'font-size': 13
-          'line-height': 26
+          'line-height': 21
+          'letter-spacing': 1
         pre:
           margin: '0px 0px'
           padding: '0px 3px'
@@ -49,25 +54,25 @@ template = (dir, main) ->
           background: 'hsl(300,95%,95%)'
         '.modified_time':
           margin: '0px 10px'
-          background: '#e8e8f8'
           color: '#daa'
-        '.name':
-          background: '#edd'
-        'tr:nth-child(2n)':
-          background: '#f2f2ff'
-        'td:nth-child(2n+1)':
-          width: 52
-          color: '#f88'
-          background: '#eff'
         table:
           '-webkit-border-vertical-spacing': 0
           '-webkit-border-horizontal-spacing': 0
+        '.current':
+          'margin-left': 100
+        'tr:nth-child(2n)':
+          background: 'hsl(340,98%,98%)'
+        '.index':
+          width: 66
+          background: 'hsla(60,70%,80%,0.5)'
+          color: 'hsl(0,70%,80%)'
     $body:
       $p:
         $a:
           href: dir.parent
           $text: 'Home' + dir.parent
         $span:
+          class: 'current'
           $text: dir.own
       $pipe: main
 
@@ -86,7 +91,9 @@ source = (path, res) ->
     sub = {}
     for line, index in data.split '\n'
       piece =
-        $td: "#{index}"
+        $td:
+          class: 'index'
+          $text: "#{index}"
         $td1:
           $pre:
             $code: line
@@ -132,7 +139,7 @@ parent = (path) ->
 dirview = (path, res) ->
   fs.readdir at+path, (err, list) ->
     dir = parent path
-    html = template dir, ''
+    main ={}
     for file, index in list
       if path[-1..] isnt '/' then path += '/'
       target = at+path+file
@@ -146,39 +153,32 @@ dirview = (path, res) ->
       min = stat.mtime.getMinutes()
       mtime = "#{month}/#{date} #{hour}:#{min}"
       line =
-        $a:
-          class: 'name'
-          href: path+file+'?raw'
-          $text: file
-        $span:
+        $td:
+          style:
+            width: 200
+          $a:
+            href: path+file+'?raw'
+            $text: file
+            $text: file
+        $td1:
+          style:
+            width: 100
           class: 'modified_time'
           $text: mtime
-      if file.match /\.(md)|(markdown)$/
-        line.$span1 = ' '
-        line.$a1 =
-          href: path+file+'?md'
-          $text: '->Markdown'
-      if file.match /\.(html?)|(markdown)$/
-        line.$span2 = ' '
-        line.$a2 =
-          href: path+file+'?html'
-          $text: '->HTML'
-      if file.match /\.lx$/
-        line.$span4 = ' '
-        line.$a4 =
-          href: path+file+'?lx'
-          $text: '->LiuXian'
-      if file.match /\.note$/
-        line.$span5 = ' '
-        line.$a5 =
-          href: path+file+'?note'
-          $text: '->Note'
-      if file.match /\.js$/
-        line.$span6 = ' '
-        line.$a6 =
-          href: path+file+'?js'
-          $text: '->js'
-      html.$html.$body["$p#{index}"] = line
+        $td2:
+          style:
+            width: 100
+          $text: '_'
+      subfix = file.match /\.(\w+)$/
+      if subfix?
+        type = subfix[1]
+        if type in ['md', 'markdown', 'html', 'lx', 'note', 'js']
+          line.$td2 =
+            $a:
+              href: path+file+"?#{type}"
+              $text: "->#{type}"
+      main["$tr#{index}"] = line
+    html = template dir, $table: main
     res.end compile html
 
 give_raw = (path, res) ->
