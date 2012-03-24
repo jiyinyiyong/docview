@@ -182,7 +182,8 @@ dirview = (path, res) ->
 
 give_raw = (path, res) ->
   fs.readFile at+path, 'utf8', (err, data) ->
-      res.end data
+    res.writeHead 200, 'Content-Type': 'text/javascript'
+    res.end data
 
 give_404 = (path, res) ->
   res.writeHead 200, 'Content-Type': 'text/html'
