@@ -43,6 +43,10 @@ template = (dir, main) ->
         pre:
           margin: '0px 0px'
           padding: '0px 3px'
+        'body>code, p>code':
+          margin: '0px 3px'
+          padding: '0px 3px'
+          background: 'hsl(300,95%,95%)'
         a:
           'text-decoration': 'none'
         'body>pre, p>code':
