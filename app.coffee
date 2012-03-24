@@ -32,17 +32,13 @@ template = (dir, main) ->
   $html:
     $head:
       $title: dir.own
-      $link:
-        href: 'http://fonts.googleapis.com/css?family=Ubuntu'
-        rel: 'stylesheet'
-        type: 'text/css'
       $meta:
         charset: 'utf-8'
       $style:
         '*':
-          'font-family': 'Ubuntu Mono'
+          'font-family': 'Monospace'
           'font-size': 13
-          'line-height': 21
+          'line-height': 26
           'letter-spacing': 1
         pre:
           margin: '0px 0px'
