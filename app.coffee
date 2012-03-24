@@ -26,7 +26,7 @@ render = (path, type, res) ->
       else if type is 'note' then note_page path, res
       else if type is 'js'   then give_raw  path, res
       else give_raw path, res
-    else give_raw path, res
+    else give_404 path, res
 
 template = (dir, main) ->
   $html:
@@ -183,3 +183,15 @@ dirview = (path, res) ->
 give_raw = (path, res) ->
   fs.readFile at+path, 'utf8', (err, data) ->
       res.end data
+
+give_404 = (path, res) ->
+  res.writeHead 200, 'Content-Type': 'text/html'
+  p_ = """<meta charset="utf-8">request for "#{path}"...
+  <br><div id="xx"><div><script>
+  window.onload = function(){xx=document.getElementById("xx");
+  func = function(){xx.innerHTML+='<span style="font-size:'
+  +Math.random()*404+'">404</span> ';
+  window.scrollBy(404, 404)}
+  setInterval(func, 404);}
+  </script>"""
+  res.end p_
