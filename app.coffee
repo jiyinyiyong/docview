@@ -121,6 +121,10 @@ note_page = (path, res) ->
 
 gfm = (path, res) ->
   fs.readFile at+path, 'utf8', (err, data) ->
+    lines = data.split '\n'
+    for line, index in lines
+      lines[index] = do line.trimRight
+    data = lines.join '\n'
     dir = parent path
     data = makeHtml data
     html = template dir, data
@@ -139,7 +143,7 @@ dirview = (path, res) ->
   fs.readdir at+path, (err, list) ->
     dir = parent path
     main ={}
-    for file, index in list
+    for file, index in do list.sort
       if path[-1..] isnt '/' then path += '/'
       target = at+path+file
       isdir = false
@@ -189,10 +193,12 @@ give_404 = (path, res) ->
   res.writeHead 200, 'Content-Type': 'text/html'
   p_ = """<meta charset="utf-8">request for "#{path}"...
   <br><div id="xx"><div><script>
-  window.onload = function(){xx=document.getElementById("xx");
-  func = function(){xx.innerHTML+='<span style="font-size:'
-  +Math.random()*404+'">404</span> ';
-  window.scrollBy(404, 404)}
-  setInterval(func, 404);}
+  window.onload =
+    function(){
+      xx=document.getElementById("xx");
+      func = function(){
+        xx.innerHTML+='<span style="font-size:'+Math.random()*404+'">404</span> ';
+      window.scrollBy(404, 404)}
+    setInterval(func, 404);}
   </script>"""
   res.end p_
