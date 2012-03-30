@@ -50,13 +50,16 @@ table_tr = (arr) ->
   codes = []
   notes = []
   for line in arr
+    line = line.replace(/</g,'&lt;').replace(/>/g,'&gt;')
     if line.match /^\s\s/ then codes.push line
     else notes.push line
   codes = codes.map (line) ->
     line = line[2..]
   codes = codes.join '\n'
   notes = notes.map (line) ->
-    line = line.replace(/`([^`]*[^\\`]+)`/g, '<code>$1</code>')
+    line = line.replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/`([^`]*[^\\`]+)`/g, '<code>$1</code>')
       .replace(/(https?:(\/\/)?(\S+))/g, '<a href="$1">$3</a>')
       .replace(/#([^#]+[^\\])#/g, '<b>$1</b>')
   notes = notes.join '<br>'
