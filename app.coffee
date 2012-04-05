@@ -65,6 +65,10 @@ template = (dir, main) ->
           width: 66
           background: 'hsla(60,70%,80%,0.5)'
           color: 'hsl(0,70%,80%)'
+        '#uyan_frame':
+          width: 600
+          padding: 10
+          'margin-top': 100
     $body:
       $p:
         $a:
