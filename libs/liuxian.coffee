@@ -38,9 +38,10 @@ mark_line = (line) ->
     .replace(/</g,'&lt')
     .replace(/\t/g,'&nbsp;')
     .replace(/\s/g, '&nbsp;')
+    .replace(/('[^(\\')]+[^\\]')/, '<span class="string">$1</span>')
 
 comment_line = (line) ->
-  line.replace(/`([^`]*[^\\`]+)`/g, '<code id="inline_code">$1</code>')
+  line.replace(/`([^`]*[^\\`]+)`/g, '<code class="inline_code">$1</code>')
     .replace(/(https?:(\/\/)?\S+)/g, '<a href="$1">$1</a>')
 
 make_html = (arr) ->
@@ -54,8 +55,6 @@ make_html = (arr) ->
       html += "<p class='code_line'>#{line}</p>"
   html
 
-if typeof exports is 'object' then exports.lx = 0
-
 data = """
 dd1`rewr`
 http:google.com
@@ -63,11 +62,12 @@ http:google.com
 sfsdf
   sdfsdfs`fgdf`
     sdfsdfs
+      ff
     dfg
 
     dgd
   dd
-sdfsdfs
+sdfsdfs '55555'
 
 sdgs
 sg sfg
@@ -75,20 +75,27 @@ sg sfg
 
 make_page = (arr) ->
   html = '<style>
+    *{
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
     #lx_page{
       margin: 13px 26px;
-      -webkit-box-shadow: 2px 4px 20px #a77;
+      -webkit-box-shadow: 2px 4px 10px #a77;
       width: 800px;
+      padding: 2px;
     }
     .code_block{
       width: 800px;
       background-color: hsl(56,96%,96%);
       margin-left: 20px;
-      -webkit-box-shadow: 4px 3px 20px #877;
+      -webkit-box-shadow: 3px 2px 10px #daa;
+      padding: 2px;
     }
     .code_line, .comment_line{
-      line-height: 18px;
+      line-height: 24px;
       font-size: 13px;
+      margin: 0px;
     }
     .code_line{
       font-family: monospace;
@@ -96,10 +103,20 @@ make_page = (arr) ->
     .comment_line{
       font-family: wequanyi micro hei;
     }
+    a{
+      text-decoration: none;
+      background-color: hsla(300,80%,70%,0.3);
+    }
+    .string{
+      background-color: hsla(0,80%,70%,0.3);
+    }
+    .inline_code{
+      background-color: hsla(20,90%,70%,0.3);
+    }
     </style>'
   for line in arr
     if typeof line is 'object'
-      html += "<div class='code_block'>#{make_html line}</div>"
+      html += "<div class='code_block'><code>#{make_html line}</code></div>"
     else
       if line is '' then line = '&nbsp;'
       line = comment_line (mark_line line)
@@ -107,3 +124,5 @@ make_page = (arr) ->
   "<div id='lx_page'>#{html}</div>"
 
 console.log make_page (make_array (data.split '\n'))
+
+if typeof exports is 'object' then exports.lx = 0
