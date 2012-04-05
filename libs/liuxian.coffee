@@ -43,6 +43,7 @@ mark_line = (line) ->
 comment_line = (line) ->
   line.replace(/`([^`]*[^\\`]+)`/g, '<code class="inline_code">$1</code>')
     .replace(/(https?:(\/\/)?\S+)/g, '<a href="$1">$1</a>')
+    .replace(/#(\w+)#/g, '<span class="bold">$1</span>')
 
 make_html = (arr) ->
   html = ''
@@ -81,16 +82,17 @@ make_page = (arr) ->
     }
     #lx_page{
       margin: 13px 26px;
-      -webkit-box-shadow: 2px 4px 10px #a77;
+      -webkit-box-shadow: 1px 2px 20px #ddc;
       width: 800px;
-      padding: 2px;
+      padding: 6px;
     }
     .code_block{
       width: 800px;
-      background-color: hsl(56,96%,96%);
-      margin-left: 20px;
-      -webkit-box-shadow: 3px 2px 10px #daa;
-      padding: 2px;
+      background-color: white;
+      margin-left: 17px;
+      -webkit-box-shadow: 1px 2px 20px #ddc ;
+      padding: 0px 0px 0px 2px;
+      margin-top: 1px;
     }
     .code_line, .comment_line{
       line-height: 24px;
@@ -102,16 +104,23 @@ make_page = (arr) ->
     }
     .comment_line{
       font-family: wequanyi micro hei;
+      color: hsl(0,80%,80%);
     }
     a{
       text-decoration: none;
-      background-color: hsla(300,80%,70%,0.3);
+      -webkit-box-shadow: 1px 2px 10px #daa;
+      background-color: hsla(300,80%,80%,0.2);
     }
     .string{
-      background-color: hsla(0,80%,70%,0.3);
+      background-color: hsla(0,80%,80%,0.2);
+      -webkit-box-shadow: 1px 2px 10px #daa;
     }
     .inline_code{
-      background-color: hsla(20,90%,70%,0.3);
+      background-color: hsla(20,90%,80%,0.2);
+      -webkit-box-shadow: 1px 2px 10px #daa;
+    }
+    .bold{
+      font-weight: bold;
     }
     </style>'
   for line in arr
@@ -123,6 +132,9 @@ make_page = (arr) ->
       html += "<p class='comment_line'>#{line}</p>"
   "<div id='lx_page'>#{html}</div>"
 
-console.log make_page (make_array (data.split '\n'))
+# console.log make_page (make_array (data.split '\n'))
 
-if typeof exports is 'object' then exports.lx = 0
+if typeof exports is 'object'
+  exports.lx = (str) ->
+    arr = str.split '\n'
+    make_page (make_array arr)
