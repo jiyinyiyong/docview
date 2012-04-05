@@ -27,6 +27,9 @@ make_array = (arr) ->
   output_array = []
   for item in scope_lines
     if (typeof item) is 'object'
+      while item[-1..-1][0] is ''
+        output_array.push '&nbsp;'
+        item.pop()
       output_array.push (make_array item)
     else
       output_array.push item

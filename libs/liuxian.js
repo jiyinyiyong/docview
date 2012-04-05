@@ -34,6 +34,10 @@ make_array = function(arr) {
   for (_j = 0, _len2 = scope_lines.length; _j < _len2; _j++) {
     item = scope_lines[_j];
     if ((typeof item) === 'object') {
+      while (item.slice(-1)[0] === '') {
+        output_array.push('&nbsp;');
+        item.pop();
+      }
       output_array.push(make_array(item));
     } else {
       output_array.push(item);
