@@ -1,7 +1,7 @@
 var comment_line, data, make_array, make_html, make_page, mark_line;
 
 make_array = function(arr) {
-  var code_line, empty_line, item, last_index, line, output_array, scope_lines, _i, _j, _len, _len2;
+  var code_line, empty_line, item, last_index, line, output_array, scope_lines, space, stack, _i, _j, _k, _len, _len2, _len3;
   scope_lines = [];
   for (_i = 0, _len = arr.length; _i < _len; _i++) {
     line = arr[_i];
@@ -34,11 +34,16 @@ make_array = function(arr) {
   for (_j = 0, _len2 = scope_lines.length; _j < _len2; _j++) {
     item = scope_lines[_j];
     if ((typeof item) === 'object') {
+      stack = [];
       while (item.slice(-1)[0] === '') {
-        output_array.push('&nbsp;');
+        stack.push('&nbsp;');
         item.pop();
       }
       output_array.push(make_array(item));
+      for (_k = 0, _len3 = stack.length; _k < _len3; _k++) {
+        space = stack[_k];
+        output_array.push(space);
+      }
     } else {
       output_array.push(item);
     }

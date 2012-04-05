@@ -27,10 +27,12 @@ make_array = (arr) ->
   output_array = []
   for item in scope_lines
     if (typeof item) is 'object'
+      stack = []
       while item[-1..-1][0] is ''
-        output_array.push '&nbsp;'
+        stack.push '&nbsp;'
         item.pop()
       output_array.push (make_array item)
+      output_array.push space for space in stack
     else
       output_array.push item
 
