@@ -87,9 +87,16 @@ render_src = (data) ->
 
 render_page =
   'lx':   (require './libs/liuxian').lx
-  'md':   (require 'markdown').markdown.toHTML
   'note': (require './libs/codeNotes').render
   'src':   render_src
+  'md': (data) ->
+    arr = data.split '\n'
+    arr = arr.map (line) ->
+      while line[-1..-1][0] is ' '
+        line = line[...-1]
+      return line
+    data = arr.join '\n'
+    return (require './libs/showdown').makeHtml data
 
 render_dir = (pathname, dir_list) ->
   dir_style = "
