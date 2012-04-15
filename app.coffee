@@ -3,12 +3,12 @@ ll = console.log
 fs = require 'fs'
 path = require 'path'
 url = require 'url'
-at = __dirname
 
 head_type =
   'js':     'text/javascript'
-  'coffee': 'text/javascript'
+  'coffee': 'text/coffeescript'
   'html':   'text/html'
+  'css':    'text/css'
 
 page = (title, places, main) ->
   "<html>
@@ -116,17 +116,21 @@ render_dir = (pathname, dir_list) ->
     if filename[0] is '.' then continue
     file_path = path.join pathname, filename
     fstat = fs.statSync file_path
-    if fstat.isDirectory() then filename += '/'
+    if fstat.isDirectory()
+      filename += '/'
+      default_view = '?dir'
+    else
+      default_view = '?src'
     m = fstat.mtime
     mtime = "#{m.getMonth()+1}/#{m.getDate()} #{m.getHours()}:#{m.getMinutes()}"
     subfix = ''
-    find_subfix = filename.match /\.(\w+)$/
+    find_subfix = filename.match /\.(\w+)(\?\w*)?$/
     if find_subfix?
       if find_subfix[1] in ['md', 'note', 'js', 'coffee', 'lx', 'html']
         subfix = "<a href='/#{file_path}?#{find_subfix[1]}'>#{find_subfix[1]}</a>"
     main += "
       <tr>
-        <td><a href='/#{file_path}'>#{filename}</a></td>
+        <td><a href='/#{file_path}#{default_view}'>#{filename}</a></td>
         <td>#{mtime}</td>
         <td>#{subfix}</td>
       </tr>
@@ -156,29 +160,34 @@ require('http').createServer (req, res) ->
   type  = parse.query
   [places, title] = navigation pathname
   if pathname is '' then pathname = '.'
+  ll ':'+pathname+':'
+  read_dir = if pathname is '.' then (__dirname+'/') else pathname
   # if there's no type to judge, add one if possible
   if path.existsSync(pathname)
+    ll 'file exsits'
     if (type is '' or not type?)
-      stat = fs.statSync pathname
-      # ll stat
-      if stat.isDirectory()
-        type = 'dir'
-      else type = 'src'
-    # ll type
+      find_subfix = pathname.match /\.(\w+)$/
+      if find_subfix?
+        if find_subfix[1] in ['js', 'coffee', 'html', 'css']
+          type = find_subfix[1]
+    fstat = fs.statSync read_dir
+    if fstat.isDirectory()
+      type = 'dir'
+    ll pathname, type, read_dir
     if type in ['md', 'lx', 'note', 'src']
       fs.readFile pathname, 'utf-8', (err, data) ->
         main = render_page[type] data
         res.writeHead 200, 'Content-Type': 'text/html'
         res.end (page title, places, main)
-    else if type in ['js', 'coffee', 'html']
+    else if type in ['js', 'coffee', 'html','css']
       fs.readFile pathname, 'utf-8', (err, data) ->
-        res.writeHead 200, head_type[type]
+        res.writeHead 200, 'Content-Type': head_type[type]
         res.end data
     else if type is 'dir'
-      fs.readdir pathname, (err, dir_list) ->
+      fs.readdir read_dir, (err, dir_list) ->
         if err then dir_list = String err
         main = render_dir pathname, dir_list
-        res.writeHead 200, 'text/html'
+        res.writeHead 200, 'Content-Type': 'text/html'
         res.end (page title, places, main)
     else
       res.writeHead 404, 'Content-Type': 'text/html'
