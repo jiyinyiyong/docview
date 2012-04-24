@@ -160,6 +160,8 @@ require('http').createServer (req, res) ->
   type  = parse.query
   [places, title] = navigation pathname
   long_path = path.join __dirname, pathname
+  # add this line for NAE
+  if pathname is '' then long_path += '/'
   # if there's no type to judge, add one if possible
   if path.existsSync(long_path)
     if (type is '' or not type?)
