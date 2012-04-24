@@ -73,7 +73,7 @@ table_tr = (arr) ->
       .replace(/>/g,'&gt;')
       .replace(/`([^`]*[^\\`]+)`/g, '<code>$1</code>')
       .replace(/(https?:(\/\/)?(\S+))/g, '<a href="$1">$3</a>')
-      .replace(/#([^#]+[^\\])#/g, '<b>$1</b>')
+      .replace(/#([^\\\S]+)#/g, '<b>$1</b>')
   notes = notes.join '<br>'
   tr_template codes, notes
 

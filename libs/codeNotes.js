@@ -107,7 +107,7 @@ table_tr = function(arr) {
   });
   codes = codes.join('\n');
   notes = notes.map(function(line) {
-    return line = line.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/`([^`]*[^\\`]+)`/g, '<code>$1</code>').replace(/(https?:(\/\/)?(\S+))/g, '<a href="$1">$3</a>').replace(/#([^#]+[^\\])#/g, '<b>$1</b>');
+    return line = line.replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/`([^`]*[^\\`]+)`/g, '<code>$1</code>').replace(/(https?:(\/\/)?(\S+))/g, '<a href="$1">$3</a>').replace(/#([^\\\S]+)#/g, '<b>$1</b>');
   });
   notes = notes.join('<br>');
   return tr_template(codes, notes);
