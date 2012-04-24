@@ -22,7 +22,7 @@ page = (title, places, main) ->
         }
         *{
           font-family: Monospace;
-          font-size: 14px;
+          font-size: 13px;
           letter-spacing: 0px;
           box-sizing: border-box;
         }
@@ -72,7 +72,7 @@ render_src = (data) ->
         from(hsla(80,10%,97%,0.7)), to(hsla(80,10%,95%,0.7)));
     }
     tr{
-      height: 20px;
+      height: 22px;
     }
     tr:hover{background-color: hsl(200,90%,90%);}
   "
@@ -112,7 +112,7 @@ render_dir = (pathname, dir_list) ->
     }
   "
   main = ''
-  for filename in dir_list
+  for filename in dir_list.sort()
     if filename[0] is '.' then continue
     file_path = path.join pathname, filename
     fstat = fs.statSync file_path

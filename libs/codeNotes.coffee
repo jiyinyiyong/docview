@@ -9,26 +9,38 @@ page_layout = (table, title) ->
       $meta:
         charset: 'utf-8'
       $style:
+        body:
+          margin: 0
         '*':
-          'font-size': 12
-          'line-height': 18
-          'font-family': 'Monospace, wenquanyi micro hei mono'
+          'font-size': 13
+          'line-height': 22
+          'font-family': 'wenquanyi micro hei, arial'
         td:
+          padding: '20px 10px'
           'min-width': 500
           'vertical-align': 'top'
-          background: '#eee'
           'text-align': 'top'
-          'padding': 7
+        tr:
+          background: '#fff'
+        'tr:nth-child(2n)':
+          background: '#CEDAC1'
         table:
-          'border': 0
+          border: 0
+          width: '100%'
+          'border-collapse': 'collapse'
+        code: 
+          'font-family': 'wenquanyi micro hei mono, monospace'
         'td>code':
-          padding: '0px 3px'
-          margin: '0px 3px'
-          background: '#ddd'
+          background: '#211'
+          color: '#eef'
+          padding: '1px 3px'
+          margin: '1px 1px'
         pre:
           margin: 0
+          'font-family': 'wenquanyi micro hei mono, monospace'
         a:
           'text-decoration': 'none'
+          color: '#3737D5'
     $body:
       $table: table
   render template
