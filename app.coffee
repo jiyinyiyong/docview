@@ -98,7 +98,7 @@ render_page =
     data = arr.join '\n'
     return (require './libs/showdown').makeHtml data
 
-render_dir = (pathname, dir_list) ->
+render_dir = (long_path, pathname, dir_list) ->
   dir_style = "
     tr>*:nth-child(1){
       min-width: 200px;
@@ -115,7 +115,7 @@ render_dir = (pathname, dir_list) ->
   for filename in dir_list.sort()
     if filename[0] is '.' then continue
     file_path = path.join pathname, filename
-    fstat = fs.statSync file_path
+    fstat = fs.statSync path.join(long_path, filename)
     if fstat.isDirectory()
       filename += '/'
       default_view = '?dir'
@@ -159,34 +159,30 @@ require('http').createServer (req, res) ->
   pathname  = (decodeURI parse.pathname)[1..]
   type  = parse.query
   [places, title] = navigation pathname
-  if pathname is '' then pathname = '.'
-  ll ':'+pathname+':'
-  read_dir = if pathname is '.' then (__dirname+'/') else pathname
+  long_path = path.join __dirname, pathname
   # if there's no type to judge, add one if possible
-  if path.existsSync(pathname)
-    ll 'file exsits'
+  if path.existsSync(long_path)
     if (type is '' or not type?)
       find_subfix = pathname.match /\.(\w+)$/
       if find_subfix?
         if find_subfix[1] in ['js', 'coffee', 'html', 'css']
           type = find_subfix[1]
-    fstat = fs.statSync read_dir
+    fstat = fs.statSync long_path
     if fstat.isDirectory()
       type = 'dir'
-    ll pathname, type, read_dir
     if type in ['md', 'lx', 'note', 'src']
-      fs.readFile pathname, 'utf-8', (err, data) ->
+      fs.readFile long_path, 'utf-8', (err, data) ->
         main = render_page[type] data
         res.writeHead 200, 'Content-Type': 'text/html'
         res.end (page title, places, main)
     else if type in ['js', 'coffee', 'html','css']
-      fs.readFile pathname, 'utf-8', (err, data) ->
+      fs.readFile long_path, 'utf-8', (err, data) ->
         res.writeHead 200, 'Content-Type': head_type[type]
         res.end data
     else if type is 'dir'
-      fs.readdir read_dir, (err, dir_list) ->
+      fs.readdir long_path, (err, dir_list) ->
         if err then dir_list = String err
-        main = render_dir pathname, dir_list
+        main = render_dir long_path, pathname, dir_list
         res.writeHead 200, 'Content-Type': 'text/html'
         res.end (page title, places, main)
     else
