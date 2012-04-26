@@ -9,6 +9,8 @@ head_type =
   'coffee': 'text/coffeescript'
   'html':   'text/html'
   'css':    'text/css'
+  'png':    'image/png'
+  'jpg':    'image/jpg'
 
 page = (title, places, main) ->
   "<html>
@@ -126,7 +128,7 @@ render_dir = (long_path, pathname, dir_list) ->
     subfix = ''
     find_subfix = filename.match /\.(\w+)(\?\w*)?$/
     if find_subfix?
-      if find_subfix[1] in ['md', 'note', 'js', 'coffee', 'lx', 'html']
+      if find_subfix[1] in 'md note js coffee lx html png jpg'.split(' ')
         subfix = "<a href='/#{file_path}?#{find_subfix[1]}'>#{find_subfix[1]}</a>"
     main += "
       <tr>
@@ -167,7 +169,7 @@ require('http').createServer (req, res) ->
     if (type is '' or not type?)
       find_subfix = pathname.match /\.(\w+)$/
       if find_subfix?
-        if find_subfix[1] in ['js', 'coffee', 'html', 'css']
+        if find_subfix[1] in 'js coffee html css png jpg'.split(' ')
           type = find_subfix[1]
     fstat = fs.statSync long_path
     if fstat.isDirectory()
@@ -181,6 +183,11 @@ require('http').createServer (req, res) ->
       fs.readFile long_path, 'utf-8', (err, data) ->
         res.writeHead 200, 'Content-Type': head_type[type]
         res.end data
+    else if type in ['jpg' ,'png']
+      fs.readFile long_path, 'binary', (err, data) ->
+        res.writeHead 200, 'Content-Type': head_type[type]
+        res.write data, 'binary'
+        res.end()
     else if type is 'dir'
       fs.readdir long_path, (err, dir_list) ->
         if err then dir_list = String err
