@@ -83,6 +83,7 @@ make_page = (arr) ->
   html = '<style>
     *{
       -webkit-box-sizing: border-box;
+      font-size: 13px;
       box-sizing: border-box;
     }
     #lx_page{
@@ -101,7 +102,6 @@ make_page = (arr) ->
     }
     .code_line, .comment_line{
       line-height: 24px;
-      font-size: 13px;
       margin: 0px;
     }
     .code_line{
@@ -109,20 +109,26 @@ make_page = (arr) ->
     }
     .comment_line{
       font-family: wequanyi micro hei;
-      color: hsl(0,80%,80%);
+      color: hsl(0,0%,50%);
     }
     a{
+      margin: 0px 3px;
+      padding: 0px 3px;
       text-decoration: none;
-      -webkit-box-shadow: 1px 2px 10px #daa;
+      -webkit-box-shadow: 1px 1px 10px #edd;
       background-color: hsla(300,80%,80%,0.2);
     }
     .string{
+      margin: 0px 3px;
+      padding: 0px 3px;
       background-color: hsla(0,80%,80%,0.2);
-      -webkit-box-shadow: 1px 2px 10px #daa;
+      -webkit-box-shadow: 1px 1px 10px #edd;
     }
     .inline_code{
+      margin: 0px 3px;
+      padding: 0px 3px;
       background-color: hsla(20,90%,80%,0.2);
-      -webkit-box-shadow: 1px 2px 10px #daa;
+      -webkit-box-shadow: 1px 1px 10px #edd;
     }
     .bold{
       font-weight: bold;
