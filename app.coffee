@@ -87,16 +87,16 @@ render_src = (data) ->
       margin: 0px;
     }
   "
-  lines = data.split('\n').map (x) ->
-    if x is '' then ' ' else x
+  lines = data.replace(/>/g,'&gt;').replace(/</g,'&lt;')
+    .split('\n').map (x) ->
+      if x is '' then '&nbsp' else x
   line_count = lines.length
   line_index =''
   for num in [1..line_count]
     line_index+= "<span>#{num}</span><br>"
-  code_paint = data.replace(/>/g,'&gt;').replace(/</g,'&lt;')
-    .replace(/\s/,'&nbsp;')
-  code_paint = "<pre><code>#{code_paint}</code></pre>"
-  main = "<tr><td class='index'><code>#{line_index}</code></td><td>#{code_paint}</td></tr>"
+  code_paint = lines.join '<br>'
+  code_paint = "<code><pre>#{code_paint}</pre></code>"
+  main = "<tr><td class='index'>#{line_index}</td><td>#{code_paint}</td></tr>"
   return "<style>#{table_style+src_style}</style><table>#{main}</table>"
 
 render_page =
