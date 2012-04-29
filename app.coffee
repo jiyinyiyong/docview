@@ -25,8 +25,11 @@ page = (title, places, main) ->
         *{
           font-family: Monospace;
           font-size: 13px;
-          letter-spacing: 0px;
+          letter-spacing: 1px;
           box-sizing: border-box;
+        }
+        body>*{
+          padding: 2px auto;
         }
         body>nav>span{
           color: hsl(0,90%,90%);
@@ -34,10 +37,19 @@ page = (title, places, main) ->
         body>div{
           margin: 20px auto 100px;
         }
-      </style>
+        .navigation{
+          text-align: center;
+        }
+      </style><!--
+      <link rel='stylesheet'
+        href='http://softwaremaniacs.org/media/style/style.css'>
+      <script 
+        src='http://softwaremaniacs.org/media/js/highlight.pack.js'>
+      </script>
+      <script>hljs.initHighlightingOnLoad();</script>-->
     </head>
     <body>
-      <nav>#{places}</nav>
+      <nav class='navigation'>#{places}</nav>
       <div>#{main}</div>
     </body>
   </html>
@@ -46,13 +58,14 @@ page = (title, places, main) ->
 table_style = "
   table{
     border-width: 0px;
-    border-collapse:collapse
+    border-collapse: collapse;
+    margin: 0px auto;
   }
   td{
     border-width: 0px;
+    min-width: 300px;
     padding: 0px 20px 0px 0px;
   }
-  tr:hover{background-color: hsl(200,90%,90%);}
 "
 
 render_src = (data) ->
@@ -67,24 +80,23 @@ render_src = (data) ->
       min-width: 900px;
       background-color: hsla(80,10%,96%,0.7);
     }
-    .indent{
-      display: inline;
-      background: -webkit-gradient(
-        linear, 0 0, 100% 0,
-        from(hsla(80,10%,97%,0.7)), to(hsla(80,10%,95%,0.7)));
-    }
     tr{
-      height: 22px;
+      line-height: 22px;
     }
-    tr:hover{background-color: hsl(200,90%,90%);}
+    pre{
+      margin: 0px;
+    }
   "
-  main = ''
-  lines = data.split '\n'
-  for line, index in lines
-    line = line.replace(/>/g,'&gt;')
-      .replace(/</g,'&lt;')
-      .replace(/\s\s/g, '<div class="indent">&nbsp;&nbsp;</div>')
-    main += "<tr><td>#{index}</td><td>#{line}</td></tr>"
+  lines = data.split('\n').map (x) ->
+    if x is '' then ' ' else x
+  line_count = lines.length
+  line_index =''
+  for num in [1..line_count]
+    line_index+= "<span>#{num}</span><br>"
+  code_paint = data.replace(/>/g,'&gt;').replace(/</g,'&lt;')
+    .replace(/\s/,'&nbsp;')
+  code_paint = "<pre><code>#{code_paint}</code></pre>"
+  main = "<tr><td class='index'><code>#{line_index}</code></td><td>#{code_paint}</td></tr>"
   return "<style>#{table_style+src_style}</style><table>#{main}</table>"
 
 render_page =
@@ -102,16 +114,20 @@ render_page =
 
 render_dir = (long_path, pathname, dir_list) ->
   dir_style = "
-    tr>*:nth-child(1){
-      min-width: 200px;
+    *{
+      font-size: 14px;
     }
     tr>*:nth-child(2){
-      min-width: 130px;
       color: hsl(0,80%,80%);
     }
     tr{
       height: 26px;
     }
+    td{
+      min-width: 300px;
+      padding: 0px 10px;
+    }
+    tr:hover{background-color: hsl(200,90%,90%);}
   "
   main = ''
   for filename in dir_list.sort()
