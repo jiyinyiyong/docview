@@ -6,10 +6,10 @@ PostItem = React.createClass
   displayName: 'post-item'
 
   componentDidMount: ->
-    store.on 'change', @_onChange
+    store.on @_onChange
 
   componentWillUnmount: ->
-    store.removeListener 'change', @_onChange
+    store.remove @_onChange
 
   getInitialState: ->
     reading: store.getReading()
@@ -32,10 +32,10 @@ module.exports = React.createClass
   displayName: 'table-view'
 
   componentDidMount: ->
-    store.on 'change', @_onChange
+    store.on @_onChange
 
   componentWillUnmount: ->
-    store.removeListener 'change', @_onChange
+    store.remove @_onChange
 
   getInitialState: ->
     posts: store.getPosts()

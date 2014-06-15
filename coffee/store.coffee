@@ -1,5 +1,5 @@
 
-{EventEmitter} = require 'events'
+{EventEmitter} = require './events'
 ws = require './ws'
 
 module.exports = exports = new EventEmitter
@@ -18,7 +18,7 @@ findById = (id) ->
 
 exports.setMode = (name) ->
   data.mode = name
-  @emit 'change'
+  @emit()
 
 exports.getMode = ->
   data.mode
@@ -27,7 +27,7 @@ exports.getMode = ->
 
 exports.setReading = (id) ->
   data.reading = id
-  @emit 'change'
+  @emit()
 
 exports.getReading = ->
   data.reading
@@ -45,20 +45,20 @@ exports.getPosts = ->
 exports.setPosts = (posts) ->
   data.posts = posts
   data.mode = 'reading'
-  @emit 'change'
+  @emit()
 
 # more on posts
 
 exports.create = (post) ->
   data.posts.push post
   exports.setReading post._id
-  @emit 'change'
+  @emit()
 
 exports.update = (data) ->
   post = findById data._id
   post.title = data.title
   post.content = data.content
-  @emit 'change'
+  @emit()
 
 exports.delete = (id) ->
   for post, index in data.posts
@@ -67,5 +67,5 @@ exports.delete = (id) ->
       if data.reading is id
         data.reading = undefined
         data.mode = 'reading'
-      @emit 'change'
+      @emit()
       break

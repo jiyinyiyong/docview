@@ -12,10 +12,10 @@ module.exports = React.createClass
     mode: 'loading'
 
   componentDidMount: ->
-    store.on 'change', @_onChange
+    store.on @_onChange
 
   componentWillUnmount: ->
-    store.removeListener 'change', @_onChange
+    store.remove @_onChange
 
   _onChange: ->
     @setState mode: store.getMode()

@@ -23,10 +23,11 @@ exports.create = (data, cb) ->
 exports.update = (data, cb) ->
   cond = _id: data._id
   Post.findOne cond, (err, post) ->
-    post.title = data.title
-    post.content = data.content
-    post.save (err, newPost) ->
-      cb newPost
+    if post?
+      post.title = data.title
+      post.content = data.content
+      post.save (err, newPost) ->
+        cb newPost
 
 exports.delete = (id, cb) ->
   cond = _id: id

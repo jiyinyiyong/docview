@@ -17,7 +17,7 @@ body > * {
 }
 
 body, input, textarea {
-    font-family: "Kaiti SC", sans-serif;
+    font-family: Georgia, "Hiragino Sans GB", sans-serif;
     font-size: 18px;
     line-height: 1.5em;
 }

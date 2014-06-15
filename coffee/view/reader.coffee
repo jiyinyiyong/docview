@@ -12,10 +12,10 @@ module.exports = React.createClass
     posts: store.getPosts()
 
   componentDidMount: ->
-    store.on 'change', @_onChange
+    store.on @_onChange
 
   componentWillUnmount: ->
-    store.removeListener 'change', @_onChange
+    store.remove @_onChange
 
   _onChange: ->
     @setState @getInitialState()
