@@ -2,9 +2,25 @@
 Docview
 ------
 
-Display Markdown files in web pages
+Markdown files in web pages
 
-I trying to make a tool that makes editing HTML easier.
+Demo: http://repo.tiye.me/docview/
+
+### Usage
+
+Most code is writtern in CoffeeScript.
+You need to compile is you want to run:
+
+```
+npm i
+bower i
+./make.coffee dev
+coffee src/app.coffee
+```
+
+Also, MongoDB is required for saving contents.
+
+And notice that saving is slow. Better putting in LAN.
 
 ### License
 

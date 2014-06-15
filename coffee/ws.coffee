@@ -1,6 +1,6 @@
 
 require("ws-json-browser")
-.connect "localhost", 3000, (ws) ->
+.connect 5021, (ws) ->
 
   exports.emit = (args...) ->
     ws.emit args...

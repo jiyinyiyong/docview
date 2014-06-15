@@ -1,12 +1,12 @@
 
-server = require 'ws-json-server'
+port = 5021
 
+server = require 'ws-json-server'
 db = require './db'
 
-time = ->
-  (new Date).toISOString()
+time = -> (new Date).toISOString()
 
-server.listen 3000, (ws) ->
+server.listen port, (ws) ->
 
   db.all (docs) ->
     ws.emit 'load', docs
@@ -23,3 +23,5 @@ server.listen 3000, (ws) ->
   ws.on 'delete', (id, res) ->
     db.delete id, ->
       res id
+
+console.log "running at #{port}"
