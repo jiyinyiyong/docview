@@ -35,7 +35,9 @@ module.exports = React.createClass
               onClick: =>
                 store.setMode 'editing'
               'Edit'
-          $.div id: 'post-body',
-            readingPost.content
+          $.div
+            id: 'post-body'
+            dangerouslySetInnerHTML:
+              __html: marked readingPost.content
         -> $.div className: 'flex-column-center ui-font-fill',
           'No post selected'

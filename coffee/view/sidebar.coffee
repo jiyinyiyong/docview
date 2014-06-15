@@ -18,6 +18,7 @@ module.exports = React.createClass
         id: 'header', ref: 'query'
         className: 'ui-bar-title'
         value: @state.query
+        placeholder: 'Type to search...'
         onChange: =>
           el = @refs.query.getDOMNode()
           @setState query: el.value
