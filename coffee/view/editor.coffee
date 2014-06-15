@@ -43,7 +43,7 @@ module.exports = React.createClass
           'Delete'
       $.div className: 'flex-row-fill',
         $.textarea
-          id: 'editor'
+          className: 'post'
           placeholder: "Start writing..."
           value: editingPost.content
           onChange: (event) =>
@@ -53,6 +53,6 @@ module.exports = React.createClass
               content: event.target.value
             action.update post
         $.div
-          className: 'markdown-preview',
+          className: 'post markdown',
           dangerouslySetInnerHTML:
             __html: marked editingPost.content

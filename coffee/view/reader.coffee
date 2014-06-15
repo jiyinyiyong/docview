@@ -36,7 +36,7 @@ module.exports = React.createClass
                 store.setMode 'editing'
               'Edit'
           $.div
-            id: 'post-body'
+            className: 'post markdown'
             dangerouslySetInnerHTML:
               __html: marked readingPost.content
         -> $.div className: 'flex-column-center ui-font-fill',

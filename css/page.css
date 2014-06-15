@@ -4,7 +4,12 @@
     cursor: pointer;
 }
 
-#editor {
+.post-item:hover, .post-item.highlight {
+    background-color: rgb(241, 241, 241);
+}
+
+.post {
     min-height: 300px;
-    padding: 0 0.5em;
+    padding: 0 10px;
+    border-right: 1px solid #ddd;
 }

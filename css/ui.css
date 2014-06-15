@@ -2,6 +2,8 @@
 input, textarea {
     border: none;
     outline: none;
+    min-width: 300px;
+    margin: 0;
 }
 
 .ui-font-fill {
@@ -21,10 +23,12 @@ input, textarea {
 .ui-bar-title {
     max-height: 40px;
     padding: 0 0.5em;
+    border-bottom: 1px solid #ddd;
 }
 
 .ui-bar-side {
     max-width: 400px;
+    border-right: 1px solid #ddd;
 }
 
 .ui-line {

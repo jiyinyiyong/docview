@@ -5,10 +5,25 @@ action = require '../action'
 PostItem = React.createClass
   displayName: 'post-item'
 
+  componentDidMount: ->
+    store.on 'change', @_onChange
+
+  componentWillUnmount: ->
+    store.removeListener 'change', @_onChange
+
+  getInitialState: ->
+    reading: store.getReading()
+
+  _onChange: ->
+    @setState @getInitialState()
+
   render: ->
 
+    highlight = @state.reading is @props.data._id
+
     $.div
-      className: 'post-item ui-line'
+      className: $$.concat 'post-item ui-line',
+        if highlight then 'highlight'
       onClick: =>
         store.setReading @props.data._id
       @props.data.title
