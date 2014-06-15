@@ -1,5 +1,5 @@
 [{
-  "name": "topics",
+  "name": "docview",
   "script": "./src/app.coffee",
   "env": {
     "PORT": 5021
