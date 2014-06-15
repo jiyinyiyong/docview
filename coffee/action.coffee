@@ -1,15 +1,17 @@
 
+store = require './store'
 ws = require './ws'
 
 exports.create = (name) ->
   post =
     title: name
     content: ''
-    time: (new Date).toISOString()
   ws.emit 'create', post
 
-exports.delete = (id) ->
+exports.delete = ->
+  id = store.getReading()
   ws.emit 'delete', id
 
 exports.update = (post) ->
+  store.update post
   ws.emit 'update', post

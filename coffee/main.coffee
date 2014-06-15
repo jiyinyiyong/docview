@@ -1,14 +1,11 @@
 
-window.$ = React.DOM
-window.$$ = {}
-
+require './extend'
 store = require './store'
 ws = require './ws'
 
 AppView = require './view/app'
 
 ws.onload = ->
-  store.loaded()
 
   ws.on 'create', (post) ->
     store.create post
@@ -19,7 +16,8 @@ ws.onload = ->
   ws.on 'delete', (id) ->
     store.delete id
 
-  console.log 'app started'
+  ws.on 'load', (posts) ->
+    store.setPosts posts
 
 React.renderComponent (AppView {}),
   document.querySelector('body')

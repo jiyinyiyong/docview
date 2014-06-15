@@ -1,0 +1,27 @@
+
+@import url('./flexbox.css');
+@import url('./ui.css');
+
+@import url('./page.css');
+
+body {
+    margin: 0;
+    -webkit-user-select: none;
+}
+
+body > * {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+body, input, textarea {
+    font-family: "Kaiti SC", sans-serif;
+    font-size: 18px;
+    line-height: 1.5em;
+}
+
+body * {
+    box-sizing: border-box;
+    box-shadow: 0 0 1px rgba(0, 0, 0, 0.22);
+}
