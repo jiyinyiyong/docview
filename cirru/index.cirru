@@ -3,10 +3,10 @@ doctype
 
 html
   head
-    title Todolist
+    title DocView
     meta (:charset utf-8)
     link (:rel stylesheet) (:href css/style.css)
-    link (:rel icon) (:href png/do.png)
+    link (:rel icon) (:type image/png) (:href png/docview.png)
     @if (@ inDev) $ @block
       link (:rel stylesheet) (:href css/dev.css)
       script (:src bower_components/react/react.js)
