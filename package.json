@@ -1,11 +1,13 @@
 {
   "name": "docview",
-  "subdomain": "docview",
   "scripts": {
     "start": "app.coffee"
   },
   "version": "0.1.0",
-  "dependencies": {},
+  "dependencies": {
+    "mongoose": "^3.8.12",
+    "ws-json-server": "0.0.5-1"
+  },
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -17,5 +19,8 @@
     "url": "https://github.com/jiyinyiyong/docview/issues"
   },
   "homepage": "https://github.com/jiyinyiyong/docview",
-  "description": "Display Markdown files in web pages
+  "description": "Display Markdown files in web pages",
+  "devDependencies": {
+    "ws-json-browser": "0.0.5-0"
+  }
 }
